@@ -1764,11 +1764,12 @@ var _marked2 = _interopRequireDefault(_marked);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var loadContent = function loadContent(_path) {
-  fetch(_path).then(function (_res) {
-    return _res.text();
-  }).then(function (_text) {
-    markdown.innerHTML = (0, _marked2.default)(_text);
-  });
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', _path, true);
+  xhr.onload = function () {
+    markdown.innerHTML = (0, _marked2.default)(xhr.response);
+  };
+  xhr.send();
 };
 
 exports.default = loadContent;
