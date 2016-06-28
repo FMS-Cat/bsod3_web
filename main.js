@@ -46,7 +46,7 @@ var background = function background() {
 
   var vertQuad = "#define GLSLIFY 1\nattribute vec2 p;\n\nvoid main() {\n  gl_Position = vec4( p, 0.0, 1.0 );\n}\n";
 
-  var programPost = glCat.createProgram(vertQuad, "#define V vec2(0.,1.)\n#define lofi(i,j) (floor(i/j)*j)\n\nprecision highp float;\n#define GLSLIFY 1\n\nuniform vec2 resolution;\nuniform vec2 window;\nuniform sampler2D texture;\n\nuniform float intensity;\n\nvoid main() {\n  vec3 ret = vec3( 0.0 );\n\n  float aspect = window.x / window.y;\n  vec2 stretch = max( V.yy, vec2( 1.0 / aspect, aspect ) );\n  vec2 uv = ( ( gl_FragCoord.xy - resolution / 2.0 ) / stretch + resolution / 2.0 ) / resolution;\n\n  vec2 region = vec2( 8.0 );\n  vec2 glitchPos = floor( gl_FragCoord.xy / region ) * region / resolution;\n\n  vec3 glitchTex = texture2D( texture, glitchPos ).xyz;\n  ret = vec3(\n    texture2D( texture, uv + lofi( vec2( 0.0, glitchTex.x ) * resolution.y * intensity, 8.0 ) / resolution.y ).x,\n    texture2D( texture, uv + lofi( vec2( 0.0, glitchTex.y ) * resolution.y * intensity, 8.0 ) / resolution.y ).y,\n    texture2D( texture, uv + lofi( vec2( 0.0, glitchTex.z ) * resolution.y * intensity, 8.0 ) / resolution.y ).z\n  );\n\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 0.0 ) { ret *= V.yxx; }\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 1.0 ) { ret *= V.xyx; }\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 2.0 ) { ret *= V.xxy; }\n\n  ret *= 0.7 + abs( intensity );\n\n  gl_FragColor = vec4( ret, 1.0 );\n}\n");
+  var programPost = glCat.createProgram(vertQuad, "#define V vec2(0.,1.)\n#define lofi(i,j) (floor(i/j)*j)\n\nprecision highp float;\n#define GLSLIFY 1\n\nuniform vec2 resolution;\nuniform vec2 window;\nuniform sampler2D texture;\n\nuniform float intensity;\n\nvoid main() {\n  vec3 ret = vec3( 0.0 );\n\n  float aspect = window.x / window.y;\n  vec2 stretch = max( V.yy, vec2( 1.0 / aspect, aspect ) );\n  vec2 uv = ( ( gl_FragCoord.xy - resolution / 2.0 ) / stretch + resolution / 2.0 ) / resolution;\n\n  vec2 region = vec2( 8.0 );\n  vec2 glitchPos = floor( gl_FragCoord.xy / region ) * region / resolution;\n\n  vec3 glitchTex = texture2D( texture, glitchPos ).xyz;\n  ret = vec3(\n    texture2D( texture, uv - lofi( vec2( 0.0, glitchTex.x ) * resolution.y * intensity - 4.0, 8.0 ) / resolution.y ).x,\n    texture2D( texture, uv - lofi( vec2( 0.0, glitchTex.y ) * resolution.y * intensity - 4.0, 8.0 ) / resolution.y ).y,\n    texture2D( texture, uv - lofi( vec2( 0.0, glitchTex.z ) * resolution.y * intensity - 4.0, 8.0 ) / resolution.y ).z\n  );\n\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 0.0 ) { ret *= V.yxx; }\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 1.0 ) { ret *= V.xyx; }\n  if ( mod( gl_FragCoord.y + gl_FragCoord.x, 3.0 ) == 2.0 ) { ret *= V.xxy; }\n\n  ret *= 0.7 + abs( intensity );\n\n  gl_FragColor = vec4( ret, 1.0 );\n}\n");
 
   // ---
 
@@ -93,9 +93,10 @@ var background = function background() {
     var deltaTime = time - timePrev;
 
     var scrollPrev = scroll;
-    scroll = content.scrollTop;
-    intensity -= (scroll - scrollPrev) * 0.01;
+    scroll = window.pageYOffset;
+    var deltaScroll = scroll - scrollPrev;
 
+    intensity += deltaScroll * 0.001;
     intensity *= Math.exp(-deltaTime * 20.0);
 
     if (video.paused) {
