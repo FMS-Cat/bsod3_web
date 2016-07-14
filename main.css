@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html, body {
   margin: 0;
   padding: 0;
@@ -102,3 +103,7 @@ a {
   position: absolute;
   left: 10px;
   bottom: 10px; }
+
+[alt=ユニティ・テクノロジーズ・ジャパン] {
+  padding: 1em;
+  width: 20em; }

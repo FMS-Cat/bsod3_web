@@ -41,8 +41,13 @@ B2BもOKです。
 <div class="over" onclick="this.style.display='none'"></div>  
 </div>
 
+# Sponsor
+
+[![ユニティ・テクノロジーズ・ジャパン](image/unity.png)](http://www.unity3d.co.jp/)
+
 # Organizer
 
-[@fms_cat](https://twitter.com/fms_cat)  
+[@BSoD_Tokyo](https://twitter.com/bsod_tokyo)  
+[@FMS_Cat](https://twitter.com/fms_cat)  
 [@utgwn](https://twitter.com/utgwn)  
 [@tvsrremix](https://twitter.com/tvsrremix)  
